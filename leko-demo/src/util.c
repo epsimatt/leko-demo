@@ -48,7 +48,7 @@ bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]) {
     token = strtok(buffer, ",");
 
     while (token != NULL) {
-        py = index / PF_HEIGHT;
+        py = index / PF_WIDTH;
         px = index % PF_WIDTH;
 
         result[py][px].type = atoi(token);
@@ -76,7 +76,7 @@ Vector2 toLevelCoords(Vector2 pos) {
 
 /* 블록의 실제 X좌표를 레벨 X좌표로 변환한다. */
 int toLevelX(float x) {
-    int result = ((int) x / BLOCK_SZ) - 4;
+    int result = ((int) x - PF_STX) / BLOCK_SZ;
 
     if (result < 0)
         return 0;
@@ -88,7 +88,7 @@ int toLevelX(float x) {
 
 /* 블록의 실제 Y좌표를 레벨 Y좌표로 변환한다. */
 int toLevelY(float y) {
-    int result = (int) y / BLOCK_SZ;
+    int result = ((int) y - PF_STY) / BLOCK_SZ;
 
     if (result < 0)
         return 0;

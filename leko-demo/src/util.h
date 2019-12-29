@@ -25,13 +25,7 @@
 #include <stdbool.h>
 #include "core.h"
 
-#define LVSTR_SZ 289
-
-/* 음악 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
-bool LoadResourceMu(Music *mu, const char *file_name);
-
-/* 효과음 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
-bool LoadResourceSn(Sound *sn, const char *file_name);
+#define LVSTR_SZ 421
 
 /* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name);

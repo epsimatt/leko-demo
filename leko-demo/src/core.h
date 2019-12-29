@@ -37,13 +37,13 @@
 
 #define MAX_LEVEL 1
 
-#define BLOCK_SZ 64
+#define BLOCK_SZ 48
 
-#define PF_STX (4 * BLOCK_SZ)
-#define PF_STY 0
+#define PF_STX (5 * BLOCK_SZ)
+#define PF_STY BLOCK_SZ
 
-#define PF_WIDTH 12
-#define PF_HEIGHT 12
+#define PF_WIDTH 15
+#define PF_HEIGHT 14
 
 /* 게임 장면 목록 */
 typedef enum scene {
@@ -81,8 +81,6 @@ typedef struct block {
     Vector2 pos2; // 블록의 현재 위치를 나타낸다.
     int _frame_counter; // 블록의 프레임 카운터
 } Block;
-
-Font fn_gabia_solmee;
 
 Texture2D tx_blocks;
 Texture2D tx_border;

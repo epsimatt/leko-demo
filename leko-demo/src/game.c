@@ -23,10 +23,11 @@
 #include "core.h"
 #include "level.h"
 #include "util.h"
+#include "vec.h"
 
 #define ISTR_SZ 16
 
-static const float FALLING_SPEED = 3.2f;
+static const float FALLING_SPEED = 2.4f;
 
 static Texture2D *tx_list[TXL_LEN] = { 
     &tx_blocks,
@@ -99,41 +100,7 @@ static void DrawForeground(void) {
     elapsed_time = (time_t) _elapsed_time / TARGET_FPS;
     strftime(elapsed_time_str, ISTR_SZ, "%M:%S", localtime(&elapsed_time));
 
-    DrawTextEx(
-        fn_gabia_solmee, 
-        current_score_str, 
-        (Vector2) {
-            98.0f, 
-            42.0f
-        }, 
-        26, 
-        2, 
-        WHITE
-    );
-
-    DrawTextEx(
-        fn_gabia_solmee, 
-        highest_score_str, 
-        (Vector2) {
-            98.0f + 50.0f, 
-            42.0f + 68.0f
-        }, 
-        26, 
-        2, 
-        WHITE
-    );
-
-    DrawTextEx(
-        fn_gabia_solmee,
-        elapsed_time_str, 
-        (Vector2) {
-            98.0f, 
-            42.0f + 2 * 68.0f
-        }, 
-        26, 
-        2, 
-        WHITE
-    );
+    /* TODO: ... */
 }
 
 /* 블록이 놓이는 공간을 그린다. */
@@ -168,17 +135,15 @@ static void DrawPlayfield(void) {
 
     HandleMouseEvents();
 
-    DrawTexture(tx_border, 0, 0, WHITE);
+    DrawTexture(tx_border, (5 * BLOCK_SZ) - 16, BLOCK_SZ - 16, WHITE);
 }
 
 /* 주어진 블록과 인접한 모든 블록을 찾는다. */
 static void FindMatches(Block *block) {
-    bool delete_self = false;
-
     int px = toLevelX(block->pos2.x);
     int py = toLevelY(block->pos2.y);
 
-    if (block->type > BLT_WALL && block->state == BLS_NORMAL) {
+    if (block->type > BLT_WALL && block->state < BLS_FALLING) {
         adjacent_blocks[0] = GetBlock(px - 1, py); // 바로 왼쪽 칸에 있는 블록
         adjacent_blocks[1] = GetBlock(px + 1, py); // 바로 오른쪽 칸에 있는 블록
         adjacent_blocks[2] = GetBlock(px, py - 1); // 바로 위쪽 칸에 있는 블록
@@ -189,12 +154,9 @@ static void FindMatches(Block *block) {
                 && adjacent_blocks[i]->type == block->type
                 && adjacent_blocks[i]->state == BLS_NORMAL) {
                 adjacent_blocks[i]->state = BLS_MARKED;
-                delete_self = true;
+                block->state = BLS_MARKED;
             }
         }
-
-        if (delete_self)
-            block->state = BLS_MARKED;
     }
 }
 
@@ -212,7 +174,7 @@ static Block *GetBlock(int px, int py) {
     마우스 커서가 블록의...
     - 왼쪽 방향에 있으면 -1을 반환한다.
     - 오른쪽 방향에 있으면 1을 반환한다.
-    - 블록 가운데에 있으면 0을 반환한다.
+    - 가운데에 있으면 0을 반환한다.
 */
 static int GetRelativeCursorPosition(Block *block) {
     Vector2 cursor;
@@ -262,7 +224,6 @@ static void HandleMouseEvents(void) {
             selected_block = c_block;
 
         if (selected_block != NULL && selected_block->type > BLT_WALL) {
-
             should_highlight = true;
             rel_cp = GetRelativeCursorPosition(selected_block);
 
@@ -275,8 +236,6 @@ static void HandleMouseEvents(void) {
             adjacent_blocks[3] = GetBlock(cb_x, cb_y + 1); // 바로 아래쪽 칸에 있는 블록
 
             if (adjacent_blocks[0]->type == BLT_EMPTY) {
-                // DrawRectangle(0, selected_block->pos2.y, selected_block->pos2.x, BLOCK_SZ, BLUE);
-
                 // 마우스 커서가 선택한 블록의 왼쪽에 있는가?
                 if (rel_cp < 0 && selected_block->state != BLS_FALLING) {
                     SetBlock(cb_x - 1, cb_y, selected_block);
@@ -287,8 +246,6 @@ static void HandleMouseEvents(void) {
             }
 
             if (adjacent_blocks[1]->type == BLT_EMPTY) {
-                // DrawRectangle(selected_block->pos2.x + BLOCK_SZ, selected_block->pos2.y, DEFAULT_WIDTH - selected_block->pos2.x, BLOCK_SZ, DARKBLUE);
-
                 // 마우스 커서가 선택한 블록의 오른쪽에 있는가?
                 if (rel_cp > 0 && selected_block->state != BLS_FALLING) {
                     SetBlock(cb_x + 1, cb_y, selected_block);
@@ -317,7 +274,7 @@ static void HandleMouseEvents(void) {
             DrawTextureRec(
                 tx_clicked,
                 (Rectangle) { (float) should_highlight * BLOCK_SZ, 0.0f, (float) BLOCK_SZ, (float) BLOCK_SZ },
-                (Vector2) { (float) (n_cursor.x + 4.0f) * BLOCK_SZ, (float) n_cursor.y * BLOCK_SZ },
+                (Vector2) { (float) PF_STX + (float) n_cursor.x * BLOCK_SZ, (float) PF_STY + (float) n_cursor.y * BLOCK_SZ },
                 WHITE
             );
         }
@@ -403,16 +360,11 @@ void InitGameplayScreen(void) {
     _elapsed_time = 0;
     result = 0;
 
-    fn_gabia_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 48, NULL, 128);
-
     for (int i = 0; i < TXL_LEN; i++)
         if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))
             result = 1;
 
-    LoadLevelFromStr(
-        LEVEL_DEFAULT,
-        playfield
-    );
+    LoadLevelFromStr(LEVEL_01, playfield);
 }
 
 /* 게임 플레이 화면을 업데이트한다. */
