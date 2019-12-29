@@ -23,7 +23,6 @@
 #include "core.h"
 #include "level.h"
 #include "util.h"
-#include "vec.h"
 
 #define ISTR_SZ 16
 
@@ -115,8 +114,7 @@ static void DrawPlayfield(void) {
             FindMatches(block);
 
             if (block->state == BLS_MARKED) {
-                // PlayBlockAnimation(block);
-                SetBlock(px, py, NULL);
+                PlayBlockAnimation(block);
             } else {
                 DrawTextureRec(
                     tx_blocks,
@@ -296,13 +294,18 @@ static void PlayBlockAnimation(Block *block) {
     static float alpha;
     static float duration;
 
-    duration = TARGET_FPS * 0.5f;
+    int px = toLevelX(block->pos2.x);
+    int py = toLevelY(block->pos2.y);
+
+    duration = TARGET_FPS * 0.25f;
     alpha = 1.0f - (block->_frame_counter / duration);
 
     if (alpha < 0.0f)
         alpha = 0.0f;
 
     if (block->_frame_counter < duration) {
+        block->_frame_counter++;
+
         DrawTextureRec(
             tx_blocks,
             (Rectangle) {
@@ -314,8 +317,10 @@ static void PlayBlockAnimation(Block *block) {
             block->pos2,
             Fade(WHITE, alpha)
         );
+    } else {
+        block->_frame_counter = 0;
 
-        block->_frame_counter++;
+        SetBlock(px, py, NULL);
     }
 }
 
