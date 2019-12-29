@@ -24,8 +24,6 @@
 #include "level.h"
 #include "util.h"
 
-#define ISTR_SZ 16
-
 static const float FALLING_SPEED = 2.4f;
 
 static Texture2D *tx_list[TXL_LEN] = { 
@@ -99,7 +97,41 @@ static void DrawForeground(void) {
     elapsed_time = (time_t) _elapsed_time / TARGET_FPS;
     strftime(elapsed_time_str, ISTR_SZ, "%M:%S", localtime(&elapsed_time));
 
-    /* TODO: ... */
+    DrawTextEx(
+        fn_solmee, 
+        current_score_str, 
+        (Vector2) {
+            136.0f, 
+            176.0f
+        }, 
+        28,
+        2, 
+        CLR_TEXT
+    );
+
+    DrawTextEx(
+        fn_solmee, 
+        highest_score_str, 
+        (Vector2) {
+            136.0f, 
+            176.0f + 44.0f
+        }, 
+        28,
+        2, 
+        CLR_TEXT
+    );
+
+    DrawTextEx(
+        fn_solmee, 
+        elapsed_time_str, 
+        (Vector2) {
+            136.0f, 
+            176.0f + 2 * 44.0f
+        }, 
+        28,
+        2, 
+        CLR_TEXT
+    );
 }
 
 /* 블록이 놓이는 공간을 그린다. */
@@ -235,7 +267,7 @@ static void HandleMouseEvents(void) {
 
             if (adjacent_blocks[0]->type == BLT_EMPTY) {
                 // 마우스 커서가 선택한 블록의 왼쪽에 있는가?
-                if (rel_cp < 0 && selected_block->state != BLS_FALLING) {
+                if (rel_cp < 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
                     SetBlock(cb_x - 1, cb_y, selected_block);
                     SetBlock(cb_x, cb_y, NULL);
 
@@ -245,7 +277,7 @@ static void HandleMouseEvents(void) {
 
             if (adjacent_blocks[1]->type == BLT_EMPTY) {
                 // 마우스 커서가 선택한 블록의 오른쪽에 있는가?
-                if (rel_cp > 0 && selected_block->state != BLS_FALLING) {
+                if (rel_cp > 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
                     SetBlock(cb_x + 1, cb_y, selected_block);
                     SetBlock(cb_x, cb_y, NULL);
 
@@ -364,6 +396,8 @@ static void UpdateBlockPosition(int px, int py) {
 void InitGameplayScreen(void) {
     _elapsed_time = 0;
     result = 0;
+
+    fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 48, NULL, 128);
 
     for (int i = 0; i < TXL_LEN; i++)
         if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))
