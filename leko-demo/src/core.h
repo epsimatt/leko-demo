@@ -35,10 +35,13 @@
 
 #define CLR_TEXT (Color) { 223, 156, 161, 255 }
 
+#define SNL_LEN 1
 #define TXL_LEN 4
 
 #define ISTR_SZ 16
+
 #define MAX_LEVEL 1
+
 #define BLOCK_SZ 48
 
 #define PF_STX (5 * BLOCK_SZ)
@@ -84,12 +87,14 @@ typedef struct block {
     int _frame_counter; // 블록의 프레임 카운터
 } Block;
 
+Font fn_solmee;
+
+Sound sn_highlighted;
+
 Texture2D tx_blocks;
 Texture2D tx_border;
 Texture2D tx_clicked;
 Texture2D tx_playfield;
-
-Font fn_solmee;
 
 time_t elapsed_time;
 

@@ -26,6 +26,16 @@
 
 static const float FALLING_SPEED = 2.4f;
 
+/* 효과음 리소스 포인터 변수 목록 */
+static Sound *sn_list[SNL_LEN] = {
+    &sn_highlighted
+};
+
+/* 효과음 리소스 파일 목록 */
+static const char *snf_list[SNL_LEN] = {
+    "res/sounds/highlighted.wav",
+};
+
 static Texture2D *tx_list[TXL_LEN] = { 
     &tx_blocks,
     &tx_border,
@@ -301,6 +311,8 @@ static void HandleMouseEvents(void) {
     } else {
         // 마우스 커서가 가리키는 공간이 블록으로 채워져 있는가?
         if (c_block != NULL && c_block->type > BLT_EMPTY) {
+            PlaySound(sn_highlighted);
+
             DrawTextureRec(
                 tx_clicked,
                 (Rectangle) { (float) should_highlight * BLOCK_SZ, 0.0f, (float) BLOCK_SZ, (float) BLOCK_SZ },
@@ -398,6 +410,10 @@ void InitGameplayScreen(void) {
     result = 0;
 
     fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 48, NULL, 128);
+
+    for (int i = 0; i < SNL_LEN; i++)
+        if (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]))
+            result = 1;
 
     for (int i = 0; i < TXL_LEN; i++)
         if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))
