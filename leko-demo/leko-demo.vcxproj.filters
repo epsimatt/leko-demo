@@ -24,18 +24,12 @@
     <ClCompile Include="src\main.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\util.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="src\level.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

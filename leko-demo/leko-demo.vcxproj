@@ -22,12 +22,10 @@
     <ClCompile Include="src\core.c" />
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\util.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\level.h" />
-    <ClInclude Include="src\util.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

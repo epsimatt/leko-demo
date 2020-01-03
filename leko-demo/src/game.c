@@ -22,7 +22,6 @@
 
 #include "core.h"
 #include "level.h"
-#include "util.h"
 
 static const float FALLING_SPEED = 2.4f;
 
@@ -91,6 +90,15 @@ static void PlayBlockAnimation(Block *block);
 /* 주어진 좌표에 블록을 놓는다. */
 static void SetBlock(int px, int py, Block *block);
 
+/* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
+static Vector2 toLevelCoords(Vector2 pos);
+
+/* 블록의 실제 X좌표를 레벨 X좌표로 변환한다. */
+static int toLevelX(float x);
+
+/* 블록의 실제 Y좌표를 레벨 Y좌표로 변환한다. */
+static int toLevelY(float y);
+
 /* 블록의 위치를 업데이트한다. */
 static void UpdateBlockPosition(int px, int py);
 
@@ -101,6 +109,8 @@ static void DrawBackground(void) {
 
 /* 전경 화면을 그린다. */
 static void DrawForeground(void) {
+    DrawFPS(BLOCK_SZ / 8, BLOCK_SZ / 8);
+
     sprintf(current_score_str, "%d", current_score);
     sprintf(highest_score_str, "%d", highest_score);
 
@@ -311,8 +321,6 @@ static void HandleMouseEvents(void) {
     } else {
         // 마우스 커서가 가리키는 공간이 블록으로 채워져 있는가?
         if (c_block != NULL && c_block->type > BLT_EMPTY) {
-            PlaySound(sn_highlighted);
-
             DrawTextureRec(
                 tx_clicked,
                 (Rectangle) { (float) should_highlight * BLOCK_SZ, 0.0f, (float) BLOCK_SZ, (float) BLOCK_SZ },
@@ -379,6 +387,39 @@ static void SetBlock(int px, int py, Block *block) {
     playfield[py][px].pos2 = playfield[py][px].pos1;
 }
 
+
+/* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
+static Vector2 toLevelCoords(Vector2 pos) {
+    return (Vector2) {
+        (float) toLevelX(pos.x),
+        (float) toLevelY(pos.y)
+    };
+}
+
+/* 블록의 실제 X좌표를 레벨 X좌표로 변환한다. */
+static int toLevelX(float x) {
+    int result = ((int) x - PF_STX) / BLOCK_SZ;
+
+    if (result < 0)
+        return 0;
+    else if (result > PF_WIDTH - 1)
+        return PF_WIDTH - 1;
+    else
+        return result;
+}
+
+/* 블록의 실제 Y좌표를 레벨 Y좌표로 변환한다. */
+int toLevelY(float y) {
+    int result = ((int) y - PF_STY) / BLOCK_SZ;
+
+    if (result < 0)
+        return 0;
+    else if (result > PF_HEIGHT - 1)
+        return PF_HEIGHT - 1;
+    else
+        return result;
+}
+
 /* 블록의 위치를 업데이트한다. */
 static void UpdateBlockPosition(int px, int py) {
     Block *block1, *block2;
@@ -409,7 +450,8 @@ void InitGameplayScreen(void) {
     _elapsed_time = 0;
     result = 0;
 
-    fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 48, NULL, 128);
+    // https://github.com/raysan5/raylib/issues/323
+    fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 28, NULL, 128);
 
     for (int i = 0; i < SNL_LEN; i++)
         if (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]))

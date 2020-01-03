@@ -25,7 +25,7 @@
 int main(void) {
     SetTargetFPS(TARGET_FPS);
 
-    // InitAudioDevice();
+    InitAudioDevice();
     InitWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "leko-demo");
 
     while (!WindowShouldClose())
@@ -33,7 +33,7 @@ int main(void) {
 
     /* TODO: 리소스 파일 메모리 해제 */
 
-    // CloseAudioDevice();
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

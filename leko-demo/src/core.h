@@ -24,6 +24,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "raylib.h"
@@ -33,13 +35,14 @@
 
 #define TARGET_FPS 120
 
-#define CLR_TEXT (Color) { 223, 156, 161, 255 }
+#define CLR_TEXT (Color) { 231, 231, 231, 255 }
 
 #define SNL_LEN 1
 #define TXL_LEN 4
 
 #define ISTR_SZ 16
 
+#define LVSTR_SZ 421
 #define MAX_LEVEL 1
 
 #define BLOCK_SZ 48
@@ -101,6 +104,15 @@ time_t elapsed_time;
 int _elapsed_time;
 int current_score;
 int highest_score;
+
+/* 효과음 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
+bool LoadResourceSn(Sound *sn, const char *file_name);
+
+/* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+bool LoadResourceTx(Texture2D *tx, const char *file_name);
+
+/* 레벨 문자열 `str`를 배열로 변환하여, `result`에 저장한다. */
+bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]);
 
 /* 게임의 다음 장면으로 넘어간다. */
 void MoveTo(int next_scene);
