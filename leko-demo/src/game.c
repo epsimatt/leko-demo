@@ -25,16 +25,6 @@
 
 static const float FALLING_SPEED = 2.4f;
 
-/* 효과음 리소스 포인터 변수 목록 */
-static Sound *sn_list[SNL_LEN] = {
-    &sn_highlighted
-};
-
-/* 효과음 리소스 파일 목록 */
-static const char *snf_list[SNL_LEN] = {
-    "res/sounds/highlighted.wav",
-};
-
 static Texture2D *tx_list[TXL_LEN] = { 
     &tx_blocks,
     &tx_border,
@@ -52,6 +42,7 @@ static const char *txf_list[TXL_LEN] = {
 static Block playfield[PF_HEIGHT][PF_WIDTH];
 
 static Block *adjacent_blocks[4];
+
 static Block *selected_block;
 
 static char current_score_str[ISTR_SZ];
@@ -310,7 +301,7 @@ static void HandleMouseEvents(void) {
         should_highlight = false;
     }
 
-    // 블록을 마우스로 선택하고 있는가?
+    // 선택한 블록이 마우스로 움직일 수 있는 블록인가?
     if (selected_block != NULL && selected_block->type > BLT_WALL) {
         DrawTextureRec(
             tx_clicked,
@@ -452,10 +443,6 @@ void InitGameplayScreen(void) {
 
     // https://github.com/raysan5/raylib/issues/323
     fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 28, NULL, 128);
-
-    for (int i = 0; i < SNL_LEN; i++)
-        if (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]))
-            result = 1;
 
     for (int i = 0; i < TXL_LEN; i++)
         if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))

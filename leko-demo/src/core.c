@@ -24,24 +24,10 @@
 
 Scene current_scene = INIT;
 
-/* 효과음 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
-bool LoadResourceSn(Sound *sn, const char *file_name) {
-    *sn = LoadSound(file_name);
-
-    if (sn->sampleCount == 0)
-        return false;
-    else
-        return true;
-}
-
 /* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name) {
     *tx = LoadTexture(file_name);
-
-    if (tx->id == 0)
-        return false;
-    else
-        return true;
+    return (tx->id != 0);
 }
 
 /* 레벨 문자열 `str`를 배열로 변환하여, `result`에 저장한다. */

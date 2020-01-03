@@ -37,7 +37,6 @@
 
 #define CLR_TEXT (Color) { 231, 231, 231, 255 }
 
-#define SNL_LEN 1
 #define TXL_LEN 4
 
 #define ISTR_SZ 16
@@ -92,8 +91,6 @@ typedef struct block {
 
 Font fn_solmee;
 
-Sound sn_highlighted;
-
 Texture2D tx_blocks;
 Texture2D tx_border;
 Texture2D tx_clicked;
@@ -104,9 +101,6 @@ time_t elapsed_time;
 int _elapsed_time;
 int current_score;
 int highest_score;
-
-/* 효과음 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
-bool LoadResourceSn(Sound *sn, const char *file_name);
 
 /* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name);
