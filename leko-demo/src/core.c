@@ -48,11 +48,11 @@ bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]) {
         result[py][px].type = atoi(token);
         result[py][px].state = BLS_NORMAL;
         result[py][px].pos1 = (Vector2) { 
-            (float) (PF_STX + px * BLOCK_SZ), 
+            (float) (PF_STX + px * BLOCK_SZ),
             (float) (PF_STY + py * BLOCK_SZ)
         };
         result[py][px].pos2 = result[py][px].pos1;
-        
+
         token = strtok(NULL, ",");
         index++;
     }

@@ -109,37 +109,37 @@ static void DrawForeground(void) {
     strftime(elapsed_time_str, ISTR_SZ, "%M:%S", localtime(&elapsed_time));
 
     DrawTextEx(
-        fn_solmee, 
+        fn_default, 
         current_score_str, 
         (Vector2) {
             136.0f, 
-            176.0f
+            174.0f
         }, 
-        28,
+        24,
         2, 
         CLR_TEXT
     );
 
     DrawTextEx(
-        fn_solmee, 
+        fn_default, 
         highest_score_str, 
         (Vector2) {
             136.0f, 
-            176.0f + 44.0f
+            174.0f + 44.0f
         }, 
-        28,
+        24,
         2, 
         CLR_TEXT
     );
 
     DrawTextEx(
-        fn_solmee, 
+        fn_default, 
         elapsed_time_str, 
         (Vector2) {
             136.0f, 
-            176.0f + 2 * 44.0f
+            174.0f + 2 * 44.0f
         }, 
-        28,
+        24,
         2, 
         CLR_TEXT
     );
@@ -442,7 +442,7 @@ void InitGameplayScreen(void) {
     result = 0;
 
     // https://github.com/raysan5/raylib/issues/323
-    fn_solmee = LoadFontEx("res/font/gabia_solmee.ttf", 28, NULL, 128);
+    fn_default = LoadFontEx("res/font/nanumgothic-coding.ttf", 24, NULL, 128);
 
     for (int i = 0; i < TXL_LEN; i++)
         if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))

@@ -89,7 +89,7 @@ typedef struct block {
     int _frame_counter; // 블록의 프레임 카운터
 } Block;
 
-Font fn_solmee;
+Font fn_default;
 
 Texture2D tx_blocks;
 Texture2D tx_border;
