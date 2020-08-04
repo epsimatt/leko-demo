@@ -33,6 +33,7 @@ int main(void) {
 
     /* TODO: 리소스 파일 메모리 해제 */
 
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

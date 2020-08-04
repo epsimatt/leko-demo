@@ -23,25 +23,27 @@
 #include "core.h"
 #include "level.h"
 
-/* 효과음 리소스 포인터 변수 */
+/* `Sound` 리소스 포인터 변수 */
 static Sound *sn_list[SNL_LEN] = {
-    &sn_blk_pressed
+    &sn_blk_marked,
+    &sn_blk_pressed,
 };
 
-/* 효과음 리소스 파일 */
+/* `Sound` 리소스 파일 */
 static const char *snf_list[SNL_LEN] = {
+    "res/sounds/blk_marked.wav",
     "res/sounds/blk_pressed.wav",
 };
 
-/* 2D 텍스쳐 리소스 포인터 변수 */
+/* `Texture2D` 리소스 포인터 변수 */
 static Texture2D *tx_list[TXL_LEN] = {
     &tx_blocks,
     &tx_border,
     &tx_clicked,
-    &tx_playfield
+    &tx_playfield,
 };
 
-/* 2D 텍스쳐 리소스 파일 */
+/* `Texture2D` 리소스 파일 */
 static const char *txf_list[TXL_LEN] = {
     "res/images/blocks.png",
     "res/images/border.png",
@@ -167,6 +169,9 @@ static void DrawPlayfield(void) {
             FindMatches(block);
 
             if (block->state == BLS_MARKED) {
+                if (!IsSoundPlaying(sn_blk_marked))
+                    PlaySound(sn_blk_marked);
+
                 PlayBlockAnimation(block);
             } else {
                 DrawTextureRec(

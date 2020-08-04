@@ -24,19 +24,19 @@
 
 Scene current_scene = INIT;
 
-/* 음악 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
+/* `Music` 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
 bool LoadResourceMu(Music *mu, const char *file_name) {
     *mu = LoadMusicStream(file_name);
     return (mu->ctxData != NULL);
 }
 
-/* 사운드 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+/* `Sound` 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
 bool LoadResourceSn(Sound *sn, const char *file_name) {
     *sn = LoadSound(file_name);
     return (sn->sampleCount != 0);
 }
 
-/* 2D 텍스쳐 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+/* `Texture2D` 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name) {
     *tx = LoadTexture(file_name);
     return (tx->id != 0);
