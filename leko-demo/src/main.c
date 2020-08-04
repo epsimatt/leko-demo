@@ -25,6 +25,7 @@
 int main(void) {
     SetTargetFPS(TARGET_FPS);
 
+    InitAudioDevice();
     InitWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "leko-demo");
 
     while (!WindowShouldClose())

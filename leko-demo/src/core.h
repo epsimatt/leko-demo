@@ -37,14 +37,15 @@
 
 #define CLR_TEXT (Color) { 231, 231, 231, 255 }
 
+#define SNL_LEN 1
 #define TXL_LEN 4
 
-#define ISTR_SZ 16
-
-#define LVSTR_SZ 421
-#define MAX_LEVEL 1
-
 #define BLOCK_SZ 48
+#define ISTR_SZ 16
+#define LVSTR_SZ 421
+
+#define MAX_ELAPSED_TIME 3599
+#define MAX_LEVEL 1
 
 #define PF_STX (5 * BLOCK_SZ)
 #define PF_STY BLOCK_SZ
@@ -91,6 +92,8 @@ typedef struct block {
 
 Font fn_default;
 
+Sound sn_blk_pressed;
+
 Texture2D tx_blocks;
 Texture2D tx_border;
 Texture2D tx_clicked;
@@ -102,7 +105,13 @@ int _elapsed_time;
 int current_score;
 int highest_score;
 
-/* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+/* 음악 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
+bool LoadResourceMu(Music *mu, const char *file_name);
+
+/* 사운드 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
+bool LoadResourceSn(Sound *sn, const char *file_name);
+
+/* 2D 텍스쳐 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name);
 
 /* 레벨 문자열 `str`를 배열로 변환하여, `result`에 저장한다. */

@@ -23,15 +23,25 @@
 #include "core.h"
 #include "level.h"
 
-static const float FALLING_SPEED = 2.4f;
+/* 효과음 리소스 포인터 변수 */
+static Sound *sn_list[SNL_LEN] = {
+    &sn_blk_pressed
+};
 
-static Texture2D *tx_list[TXL_LEN] = { 
+/* 효과음 리소스 파일 */
+static const char *snf_list[SNL_LEN] = {
+    "res/sounds/blk_pressed.wav",
+};
+
+/* 2D 텍스쳐 리소스 포인터 변수 */
+static Texture2D *tx_list[TXL_LEN] = {
     &tx_blocks,
     &tx_border,
     &tx_clicked,
     &tx_playfield
 };
 
+/* 2D 텍스쳐 리소스 파일 */
 static const char *txf_list[TXL_LEN] = {
     "res/images/blocks.png",
     "res/images/border.png",
@@ -39,10 +49,10 @@ static const char *txf_list[TXL_LEN] = {
     "res/images/playfield.png",
 };
 
+static const float FALLING_SPEED = 2.4f;
+
 static Block playfield[PF_HEIGHT][PF_WIDTH];
-
 static Block *adjacent_blocks[4];
-
 static Block *selected_block;
 
 static char current_score_str[ISTR_SZ];
@@ -244,55 +254,59 @@ static int GetRelativeCursorPosition(Block *block) {
 
 /* 마우스 이벤트를 처리한다. */
 static void HandleMouseEvents(void) {
-    Block *c_block; // 마우스 커서가 가리키는 블록
+    Block *cur_block; // 마우스 커서가 가리키는 블록
 
-    Vector2 n_cursor; // 레벨 좌표로 변환된 마우스 좌표
+    Vector2 lv_mp; // 레벨 좌표로 변환된 마우스 좌표
 
     bool should_highlight = false;
 
     // 선택한 블록의 X좌표와 Y좌표
-    int cb_x = 0, cb_y = 0;
+    int cur_bx = 0, cur_by = 0;
 
     // 선택한 블록에 대한 마우스 커서의 상대적인 위치를 나타내는 값
-    int rel_cp = 0;
+    int rel_mp = 0;
 
-    n_cursor = toLevelCoords(GetMousePosition());
-    c_block = GetBlock((int) n_cursor.x, (int) n_cursor.y);
+    lv_mp = toLevelCoords(GetMousePosition());
+    cur_block = GetBlock((int) lv_mp.x, (int) lv_mp.y);
 
     // 마우스 왼쪽 버튼을 누르고 있는가?
     if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-        if (c_block != NULL && c_block->type > BLT_WALL)
-            selected_block = c_block;
+        if (cur_block != NULL && cur_block->type > BLT_WALL) {
+            if (selected_block != cur_block)
+                PlaySound(sn_blk_pressed);
+
+            selected_block = cur_block;
+        }
 
         if (selected_block != NULL && selected_block->type > BLT_WALL) {
             should_highlight = true;
-            rel_cp = GetRelativeCursorPosition(selected_block);
+            rel_mp = GetRelativeCursorPosition(selected_block);
 
-            cb_x = toLevelX(selected_block->pos2.x);
-            cb_y = toLevelY(selected_block->pos2.y);
+            cur_bx = toLevelX(selected_block->pos2.x);
+            cur_by = toLevelY(selected_block->pos2.y);
 
-            adjacent_blocks[0] = GetBlock(cb_x - 1, cb_y); // 바로 왼쪽 칸에 있는 블록
-            adjacent_blocks[1] = GetBlock(cb_x + 1, cb_y); // 바로 오른쪽 칸에 있는 블록
-            adjacent_blocks[2] = GetBlock(cb_x, cb_y - 1); // 바로 위쪽 칸에 있는 블록
-            adjacent_blocks[3] = GetBlock(cb_x, cb_y + 1); // 바로 아래쪽 칸에 있는 블록
+            adjacent_blocks[0] = GetBlock(cur_bx - 1, cur_by); // 바로 왼쪽 칸에 있는 블록
+            adjacent_blocks[1] = GetBlock(cur_bx + 1, cur_by); // 바로 오른쪽 칸에 있는 블록
+            adjacent_blocks[2] = GetBlock(cur_bx, cur_by - 1); // 바로 위쪽 칸에 있는 블록
+            adjacent_blocks[3] = GetBlock(cur_bx, cur_by + 1); // 바로 아래쪽 칸에 있는 블록
 
             if (adjacent_blocks[0]->type == BLT_EMPTY) {
                 // 마우스 커서가 선택한 블록의 왼쪽에 있는가?
-                if (rel_cp < 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
-                    SetBlock(cb_x - 1, cb_y, selected_block);
-                    SetBlock(cb_x, cb_y, NULL);
+                if (rel_mp < 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
+                    SetBlock(cur_bx - 1, cur_by, selected_block);
+                    SetBlock(cur_bx, cur_by, NULL);
 
-                    selected_block = GetBlock(cb_x - 1, cb_y);
+                    selected_block = GetBlock(cur_bx - 1, cur_by);
                 }
             }
 
             if (adjacent_blocks[1]->type == BLT_EMPTY) {
                 // 마우스 커서가 선택한 블록의 오른쪽에 있는가?
-                if (rel_cp > 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
-                    SetBlock(cb_x + 1, cb_y, selected_block);
-                    SetBlock(cb_x, cb_y, NULL);
+                if (rel_mp > 0 && selected_block->state != BLS_MARKED && selected_block->state != BLS_FALLING) {
+                    SetBlock(cur_bx + 1, cur_by, selected_block);
+                    SetBlock(cur_bx, cur_by, NULL);
 
-                    selected_block = GetBlock(cb_x + 1, cb_y);
+                    selected_block = GetBlock(cur_bx + 1, cur_by);
                 }
             }
         }
@@ -311,11 +325,11 @@ static void HandleMouseEvents(void) {
         );
     } else {
         // 마우스 커서가 가리키는 공간이 블록으로 채워져 있는가?
-        if (c_block != NULL && c_block->type > BLT_EMPTY) {
+        if (cur_block != NULL && cur_block->type > BLT_EMPTY) {
             DrawTextureRec(
                 tx_clicked,
                 (Rectangle) { (float) should_highlight * BLOCK_SZ, 0.0f, (float) BLOCK_SZ, (float) BLOCK_SZ },
-                (Vector2) { (float) PF_STX + (float) n_cursor.x * BLOCK_SZ, (float) PF_STY + (float) n_cursor.y * BLOCK_SZ },
+                (Vector2) { (float) PF_STX + (float) lv_mp.x * BLOCK_SZ, (float) PF_STY + (float) lv_mp.y * BLOCK_SZ },
                 WHITE
             );
         }
@@ -381,10 +395,9 @@ static void SetBlock(int px, int py, Block *block) {
 
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos) {
-    return (Vector2) {
+    return (Vector2){
         (float) toLevelX(pos.x),
-        (float) toLevelY(pos.y)
-    };
+        (float) toLevelY(pos.y)};
 }
 
 /* 블록의 실제 X좌표를 레벨 X좌표로 변환한다. */
@@ -444,9 +457,11 @@ void InitGameplayScreen(void) {
     // https://github.com/raysan5/raylib/issues/323
     fn_default = LoadFontEx("res/font/nanumgothic-coding.ttf", 24, NULL, 128);
 
+    for (int i = 0; i < SNL_LEN; i++)
+        result = (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]));
+
     for (int i = 0; i < TXL_LEN; i++)
-        if (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]))
-            result = 1;
+        result = (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]));
 
     LoadLevelFromStr(LEVEL_01, playfield);
 }

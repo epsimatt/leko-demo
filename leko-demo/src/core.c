@@ -24,7 +24,19 @@
 
 Scene current_scene = INIT;
 
-/* 그림 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+/* 음악 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
+bool LoadResourceMu(Music *mu, const char *file_name) {
+    *mu = LoadMusicStream(file_name);
+    return (mu->ctxData != NULL);
+}
+
+/* 사운드 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
+bool LoadResourceSn(Sound *sn, const char *file_name) {
+    *sn = LoadSound(file_name);
+    return (sn->sampleCount != 0);
+}
+
+/* 2D 텍스쳐 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
 bool LoadResourceTx(Texture2D *tx, const char *file_name) {
     *tx = LoadTexture(file_name);
     return (tx->id != 0);
@@ -47,10 +59,9 @@ bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]) {
 
         result[py][px].type = atoi(token);
         result[py][px].state = BLS_NORMAL;
-        result[py][px].pos1 = (Vector2) { 
+        result[py][px].pos1 = (Vector2){
             (float) (PF_STX + px * BLOCK_SZ),
-            (float) (PF_STY + py * BLOCK_SZ)
-        };
+            (float) (PF_STY + py * BLOCK_SZ)};
         result[py][px].pos2 = result[py][px].pos1;
 
         token = strtok(NULL, ",");
