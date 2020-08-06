@@ -22,6 +22,7 @@
     <ClCompile Include="src\core.c" />
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\opts.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core.h" />

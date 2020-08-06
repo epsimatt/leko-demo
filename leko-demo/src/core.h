@@ -30,6 +30,8 @@
 
 #include "raylib.h"
 
+#define LEKO_IMPL 
+
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 
@@ -90,7 +92,7 @@ typedef struct block {
     int _frame_counter; // 블록의 프레임 카운터
 } Block;
 
-Font fn_default;
+Font ft_default;
 
 Sound sn_blk_marked;
 Sound sn_blk_pressed;
@@ -107,22 +109,25 @@ int current_score;
 int highest_score;
 
 /* `Music` 리소스 파일을 불러온 다음, 그 내용을 `mu`에 저장한다. */
-bool LoadResourceMu(Music *mu, const char *file_name);
+LEKO_IMPL bool LoadResourceMu(Music *mu, const char *file_name);
 
 /* `Sound` 리소스 파일을 불러온 다음, 그 내용을 `sn`에 저장한다. */
-bool LoadResourceSn(Sound *sn, const char *file_name);
+LEKO_IMPL bool LoadResourceSn(Sound *sn, const char *file_name);
 
 /* `Texture2D` 리소스 파일을 불러온 다음, 그 내용을 `tx`에 저장한다. */
-bool LoadResourceTx(Texture2D *tx, const char *file_name);
+LEKO_IMPL bool LoadResourceTx(Texture2D *tx, const char *file_name);
+
+/* 게임에 사용되는 모든 리소스 파일을 준비한다. */
+LEKO_IMPL bool LoadAllResources(void);
 
 /* 레벨 문자열 `str`를 배열로 변환하여, `result`에 저장한다. */
-bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]);
+LEKO_IMPL bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDTH]);
 
 /* 게임의 다음 장면으로 넘어간다. */
-void MoveTo(int next_scene);
+LEKO_IMPL void MoveTo(int next_scene);
 
 /* 게임의 현재 장면을 업데이트한다. */
-void UpdateCurrentScreen(void);
+LEKO_IMPL void UpdateCurrentScreen(void);
 
 /* 게임 플레이 화면을 초기화한다. */
 void InitGameplayScreen(void);
@@ -132,3 +137,12 @@ void UpdateGameplayScreen(void);
 
 /* 게임 플레이 화면을 종료한다. */
 int FinishGameplayScreen(void);
+
+/* 게임 설정 화면을 초기화한다. */
+void InitOptionsScreen(void);
+
+/* 게임 설정 화면을 업데이트한다. */
+void UpdateOptionsScreen(void);
+
+/* 게임 설정 화면을 종료한다. */
+int FinishOptionsScreen(void);

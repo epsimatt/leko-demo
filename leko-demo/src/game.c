@@ -23,34 +23,6 @@
 #include "core.h"
 #include "level.h"
 
-/* `Sound` 리소스 포인터 변수 */
-static Sound *sn_list[SNL_LEN] = {
-    &sn_blk_marked,
-    &sn_blk_pressed,
-};
-
-/* `Sound` 리소스 파일 */
-static const char *snf_list[SNL_LEN] = {
-    "res/sounds/blk_marked.wav",
-    "res/sounds/blk_pressed.wav",
-};
-
-/* `Texture2D` 리소스 포인터 변수 */
-static Texture2D *tx_list[TXL_LEN] = {
-    &tx_blocks,
-    &tx_border,
-    &tx_clicked,
-    &tx_playfield,
-};
-
-/* `Texture2D` 리소스 파일 */
-static const char *txf_list[TXL_LEN] = {
-    "res/images/blocks.png",
-    "res/images/border.png",
-    "res/images/clicked.png",
-    "res/images/playfield.png",
-};
-
 static const float FALLING_SPEED = 2.4f;
 
 static Block playfield[PF_HEIGHT][PF_WIDTH];
@@ -121,7 +93,7 @@ static void DrawForeground(void) {
     strftime(elapsed_time_str, ISTR_SZ, "%M:%S", localtime(&elapsed_time));
 
     DrawTextEx(
-        fn_default, 
+        ft_default, 
         current_score_str, 
         (Vector2) {
             136.0f, 
@@ -133,7 +105,7 @@ static void DrawForeground(void) {
     );
 
     DrawTextEx(
-        fn_default, 
+        ft_default, 
         highest_score_str, 
         (Vector2) {
             136.0f, 
@@ -145,7 +117,7 @@ static void DrawForeground(void) {
     );
 
     DrawTextEx(
-        fn_default, 
+        ft_default, 
         elapsed_time_str, 
         (Vector2) {
             136.0f, 
@@ -400,9 +372,10 @@ static void SetBlock(int px, int py, Block *block) {
 
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos) {
-    return (Vector2){
+    return (Vector2) {
         (float) toLevelX(pos.x),
-        (float) toLevelY(pos.y)};
+        (float) toLevelY(pos.y)
+    };
 }
 
 /* 블록의 실제 X좌표를 레벨 X좌표로 변환한다. */
@@ -458,15 +431,6 @@ static void UpdateBlockPosition(int px, int py) {
 void InitGameplayScreen(void) {
     _elapsed_time = 0;
     result = 0;
-
-    // https://github.com/raysan5/raylib/issues/323
-    fn_default = LoadFontEx("res/font/nanumgothic-coding.ttf", 24, NULL, 128);
-
-    for (int i = 0; i < SNL_LEN; i++)
-        result = (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]));
-
-    for (int i = 0; i < TXL_LEN; i++)
-        result = (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]));
 
     LoadLevelFromStr(LEVEL_01, playfield);
 }
