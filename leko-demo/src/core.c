@@ -38,6 +38,7 @@ static const char *snf_list[SNL_LEN] = {
 static Texture2D *tx_list[TXL_LEN] = {
     &tx_blocks,
     &tx_border,
+    &tx_buttons,
     &tx_clicked,
     &tx_playfield,
 };
@@ -46,6 +47,7 @@ static Texture2D *tx_list[TXL_LEN] = {
 static const char *txf_list[TXL_LEN] = {
     "res/images/blocks.png",
     "res/images/border.png",
+    "res/images/buttons.png",
     "res/images/clicked.png",
     "res/images/playfield.png",
 };

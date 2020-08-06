@@ -28,6 +28,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "btn.h"
 #include "raylib.h"
 
 #define LEKO_IMPL 
@@ -35,13 +36,16 @@
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 
+#define BT1_WIDTH 176
+#define BT1_HEIGHT 48
+
 #define TARGET_FPS 120
 
 #define CLR_OVERLAY (Color) { 35, 37, 37, 127 }
 #define CLR_TEXT (Color) { 231, 231, 231, 255 }
 
 #define SNL_LEN 2
-#define TXL_LEN 4
+#define TXL_LEN 5
 
 #define BLOCK_SZ 48
 #define ISTR_SZ 16
@@ -99,8 +103,13 @@ Sound sn_blk_pressed;
 
 Texture2D tx_blocks;
 Texture2D tx_border;
+Texture2D tx_buttons;
 Texture2D tx_clicked;
 Texture2D tx_playfield;
+
+Button *bt_options;
+Button *bt_retry;
+Button *bt_quit;
 
 time_t elapsed_time;
 

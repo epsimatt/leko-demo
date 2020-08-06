@@ -38,6 +38,9 @@ static int result;
 /* 배경 화면을 그린다. */
 static void DrawBackground(void);
 
+/* 메뉴 버튼을 그린다. */
+static void DrawButtons(void);
+
 /* 전경 화면을 그린다. */
 static void DrawForeground(void);
 
@@ -56,6 +59,9 @@ static int GetRelativeCursorPosition(Block *block);
 /* 마우스 이벤트를 처리한다. */
 static void HandleMouseEvents(void);
 
+/* 메뉴 버튼을 초기화한다. */
+static void InitButtons(void);
+
 /* 마우스 커서가 주어진 블록을 가리키고 있는지 확인한다. */
 static bool IsBlockSelected(Block *block);
 
@@ -64,9 +70,6 @@ static void PlayBlockAnimation(Block *block);
 
 /* 주어진 좌표에 블록을 놓는다. */
 static void SetBlock(int px, int py, Block *block);
-
-/* 게임 설정 창을 보여준다. */
-void ShowOptionsMenu(void);
 
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos);
@@ -80,14 +83,26 @@ static int toLevelY(float y);
 /* 블록의 위치를 업데이트한다. */
 static void UpdateBlockPosition(int px, int py);
 
+/* 게임 설정 창을 보여준다. */
+void ShowOptionsMenu(void);
+
 /* 배경 화면을 그린다. */
 static void DrawBackground(void) {
     DrawTexture(tx_playfield, 0, 0, WHITE);
 }
 
+/* 메뉴 버튼을 그린다. */
+static void DrawButtons(void) {
+    DrawButton(bt_options);
+    DrawButton(bt_retry);
+    DrawButton(bt_quit);
+}
+
 /* 전경 화면을 그린다. */
 static void DrawForeground(void) {
     DrawFPS(BLOCK_SZ / 8, BLOCK_SZ / 8);
+
+    DrawButtons();
 
     sprintf(current_score_str, "%d", current_score);
     sprintf(highest_score_str, "%d", highest_score);
@@ -316,6 +331,43 @@ static void HandleMouseEvents(void) {
     }
 }
 
+/* 메뉴 버튼을 초기화한다. */
+static void InitButtons(void) {
+    /* clang-format off */
+
+    bt_options = InitButton(
+        tx_buttons,
+        (Rectangle) { 0, 0, BT1_WIDTH, BT1_HEIGHT },
+        (Vector2) { 
+            48.0f,
+            422.0f
+        }, 
+        WHITE
+    );
+
+    bt_retry = InitButton(
+        tx_buttons,
+        (Rectangle) { BT1_WIDTH, 0, BT1_WIDTH, BT1_HEIGHT },
+        (Vector2) { 
+            48.0f,
+            422.0f + (BT1_HEIGHT + 14.0f)
+        }, 
+        WHITE
+    );
+
+    bt_quit = InitButton(
+        tx_buttons,
+        (Rectangle) { BT1_WIDTH * 2.0f, 0, BT1_WIDTH, BT1_HEIGHT },
+        (Vector2) { 
+            48.0f,
+            422.0f + (BT1_HEIGHT + 14.0f) * 2.0f
+        }, 
+        WHITE
+    );
+
+    /* clang-format on */
+}
+
 /* 주어진 블록을 마우스 커서가 가리키고 있는지 확인한다. */
 static bool IsBlockSelected(Block *block) {
     Vector2 cursor = GetMousePosition();
@@ -435,6 +487,8 @@ void InitGameplayScreen(void) {
     _elapsed_time = 0;
     result = 0;
 
+    InitButtons();
+
     LoadLevelFromStr(LEVEL_01, playfield);
 }
 
@@ -444,6 +498,8 @@ void UpdateGameplayScreen(void) {
 
     DrawBackground();
     DrawForeground();
+    DrawButtons();
+
     DrawPlayfield();
 }
 
