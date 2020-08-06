@@ -23,6 +23,7 @@
 #include "core.h"
 
 int main(void) {
+    // SetConfigFlags(FLAG_RESERVED | FLAG_WINDOW_ALWAYS_RUN);
     SetTargetFPS(TARGET_FPS);
 
     InitAudioDevice();

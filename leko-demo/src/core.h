@@ -37,6 +37,7 @@
 
 #define TARGET_FPS 120
 
+#define CLR_OVERLAY (Color) { 35, 37, 37, 127 }
 #define CLR_TEXT (Color) { 231, 231, 231, 255 }
 
 #define SNL_LEN 2
@@ -58,7 +59,6 @@
 /* 게임 장면 목록 */
 typedef enum scene {
     INIT,
-    OPTIONS,
     GAMEPLAY
 } Scene;
 
@@ -137,12 +137,3 @@ void UpdateGameplayScreen(void);
 
 /* 게임 플레이 화면을 종료한다. */
 int FinishGameplayScreen(void);
-
-/* 게임 설정 화면을 초기화한다. */
-void InitOptionsScreen(void);
-
-/* 게임 설정 화면을 업데이트한다. */
-void UpdateOptionsScreen(void);
-
-/* 게임 설정 화면을 종료한다. */
-int FinishOptionsScreen(void);

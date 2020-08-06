@@ -120,10 +120,6 @@ LEKO_IMPL bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDT
 LEKO_IMPL void MoveTo(int next_scene) {
     if (current_scene != next_scene) {
         switch (next_scene) {
-            case OPTIONS:
-                InitOptionsScreen();
-                break;
-
             case GAMEPLAY:
                 InitGameplayScreen();
                 break;
@@ -141,10 +137,6 @@ LEKO_IMPL void UpdateCurrentScreen(void) {
         case INIT:
             LoadAllResources();
             MoveTo(GAMEPLAY);
-            break;
-
-        case OPTIONS:
-            UpdateOptionsScreen();
             break;
 
         case GAMEPLAY:

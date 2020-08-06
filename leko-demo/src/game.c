@@ -65,6 +65,9 @@ static void PlayBlockAnimation(Block *block);
 /* 주어진 좌표에 블록을 놓는다. */
 static void SetBlock(int px, int py, Block *block);
 
+/* 게임 설정 창을 보여준다. */
+void ShowOptionsMenu(void);
+
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos);
 

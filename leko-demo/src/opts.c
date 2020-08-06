@@ -24,36 +24,8 @@
 
 #include "core.h"
 
-static int result;
-
-/* 배경 화면을 그린다. */
-static void DrawBackground(void);
-
-/* 전경 화면을 그린다. */
-static void DrawForeground(void);
-
-/* 배경 화면을 그린다. */
-static void DrawBackground(void) {
+/* 게임 설정 창을 보여준다. */
+void ShowOptionsMenu(void) {
     // TODO: ...
-}
-
-/* 전경 화면을 그린다. */
-static void DrawForeground(void) {
-    // TODO: ...
-}
-
-/* 게임 설정 화면을 초기화한다. */
-void InitOptionsScreen(void) {
-    result = 0;
-}
-
-/* 게임 설정 화면을 업데이트한다. */
-void UpdateOptionsScreen(void) {
-    DrawBackground();
-    DrawForeground();
-}
-
-/* 게임 설정 화면을 종료한다. */
-int FinishOptionsScreen(void) {
-    return result;
+    DrawRectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, CLR_OVERLAY);
 }
