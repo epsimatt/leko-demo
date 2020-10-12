@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (c) 2019 epsimatt
+    Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,11 @@ int main(void) {
     InitAudioDevice();
     InitWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "leko-demo");
 
-    while (!WindowShouldClose())
+    while (!exit_window) {
+        exit_window = WindowShouldClose();
+        
         UpdateCurrentScreen();
+    }
 
     /* TODO: 리소스 파일 메모리 해제 */
 

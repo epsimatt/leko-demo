@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (c) 2019 epsimatt
+    Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@ static char current_score_str[ISTR_SZ];
 static char highest_score_str[ISTR_SZ];
 static char elapsed_time_str[ISTR_SZ];
 
+static int level;
 static int result;
 
 /* 배경 화면을 그린다. */
@@ -96,6 +97,16 @@ static void DrawButtons(void) {
     DrawButton(bt_options);
     DrawButton(bt_retry);
     DrawButton(bt_quit);
+    
+    if (bt_options->action) {
+        // TODO: ...
+    }
+    
+    if (bt_retry->action)
+        LoadLevelFromStr(LEVEL_LIST[level], playfield);
+    
+    if (bt_quit->action)
+        exit_window = true;
 }
 
 /* 전경 화면을 그린다. */
@@ -485,11 +496,12 @@ static void UpdateBlockPosition(int px, int py) {
 /* 게임 플레이 화면을 초기화한다. */
 void InitGameplayScreen(void) {
     _elapsed_time = 0;
+    level = 1;
     result = 0;
 
     InitButtons();
-
-    LoadLevelFromStr(LEVEL_01, playfield);
+    
+    LoadLevelFromStr(LEVEL_LIST[level], playfield);
 }
 
 /* 게임 플레이 화면을 업데이트한다. */

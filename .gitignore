@@ -1,4 +1,6 @@
+*.manifest
 .idea/
 **/.vs/
+**/bin/
 **/**/Debug/
 **/**/Release/

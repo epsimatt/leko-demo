@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright (c) 2019 epsimatt
+    Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -112,6 +112,8 @@ Button *bt_retry;
 Button *bt_quit;
 
 time_t elapsed_time;
+
+bool exit_window;
 
 int _elapsed_time;
 int current_score;
