@@ -25,9 +25,11 @@
 
 .PHONY: clean
 
-BIN_PATH := leko-demo/bin
-LIB_PATH := leko-demo/lib
-SRC_PATH := leko-demo/src
+LK_PATH := leko-demo
+
+BIN_PATH := $(LK_PATH)/bin
+LIB_PATH := $(LK_PATH)/lib
+SRC_PATH := $(LK_PATH)/src
 
 RAY_PATH := ../raylib/src
 

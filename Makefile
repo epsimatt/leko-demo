@@ -22,15 +22,16 @@
 
 .PHONY: clean
 
-BIN_PATH := leko-demo/bin
-LIB_PATH := leko-demo/lib
-SRC_PATH := leko-demo/src
+LK_PATH := leko-demo
+
+BIN_PATH := $(LK_PATH)/bin
+LIB_PATH := $(LK_PATH)/lib
+SRC_PATH := $(LK_PATH)/src
 
 CC := gcc
 CFLAGS := -std=c99 -O2 -D_DEFAULT_SOURCE
 LDFLAGS := -g
 LDLIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-
 
 INPUT := $(SRC_PATH)/btn.c $(SRC_PATH)/core.c $(SRC_PATH)/game.c $(SRC_PATH)/main.c $(SRC_PATH)/opts.c
 OUTPUT := ld_linux
