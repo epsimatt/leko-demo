@@ -29,9 +29,8 @@ int main(void) {
     InitAudioDevice();
     InitWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "leko-demo");
 
-    while (!exit_window) {
-        exit_window = WindowShouldClose();
-        
+    while (!close_window) {
+        close_window = WindowShouldClose();
         UpdateCurrentScreen();
     }
 

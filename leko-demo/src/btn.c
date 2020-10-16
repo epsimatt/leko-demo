@@ -25,15 +25,14 @@
 /* 버튼 구조체를 초기화한다. */
 Button *InitButton(Texture2D texture,
                    Rectangle source,
-                   Vector2 pos,
-                   Color tint) {
+                   Vector2 pos) {
     Button *result = (Button *) malloc(sizeof(Button));
 
     *result = (Button) {
         texture,
         source,
         pos,
-        tint,
+        WHITE,
         BTS_NORMAL,
         false
     };
@@ -72,7 +71,7 @@ void DrawButton(Button *button) {
                 button->texture,
                 button->source,
                 button->pos,
-                button->tint
+                WHITE
             );
 
             break;
@@ -87,7 +86,7 @@ void DrawButton(Button *button) {
                     button->source.height
                 },
                 button->pos,
-                button->tint
+                WHITE
             );
 
             break;
@@ -102,7 +101,7 @@ void DrawButton(Button *button) {
                     button->source.height
                 },
                 button->pos,
-                button->tint
+                WHITE
             );
 
             break;

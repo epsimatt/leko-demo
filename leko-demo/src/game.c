@@ -72,6 +72,9 @@ static void PlayBlockAnimation(Block *block);
 /* 주어진 좌표에 블록을 놓는다. */
 static void SetBlock(int px, int py, Block *block);
 
+/* 게임 설정 창을 보여준다. */
+static void ShowOptionsMenu(void);
+
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos);
 
@@ -84,9 +87,6 @@ static int toLevelY(float y);
 /* 블록의 위치를 업데이트한다. */
 static void UpdateBlockPosition(int px, int py);
 
-/* 게임 설정 창을 보여준다. */
-void ShowOptionsMenu(void);
-
 /* 배경 화면을 그린다. */
 static void DrawBackground(void) {
     DrawTexture(tx_playfield, 0, 0, WHITE);
@@ -98,15 +98,14 @@ static void DrawButtons(void) {
     DrawButton(bt_retry);
     DrawButton(bt_quit);
     
-    if (bt_options->action) {
-        // TODO: ...
-    }
+    if (bt_options->action)
+        ShowOptionsMenu();
     
     if (bt_retry->action)
         LoadLevelFromStr(LEVEL_LIST[level], playfield);
     
     if (bt_quit->action)
-        exit_window = true;
+        close_window = true;
 }
 
 /* 전경 화면을 그린다. */
@@ -352,8 +351,7 @@ static void InitButtons(void) {
         (Vector2) { 
             48.0f,
             422.0f
-        }, 
-        WHITE
+        }
     );
 
     bt_retry = InitButton(
@@ -362,8 +360,7 @@ static void InitButtons(void) {
         (Vector2) { 
             48.0f,
             422.0f + (BT1_HEIGHT + 14.0f)
-        }, 
-        WHITE
+        }
     );
 
     bt_quit = InitButton(
@@ -372,8 +369,7 @@ static void InitButtons(void) {
         (Vector2) { 
             48.0f,
             422.0f + (BT1_HEIGHT + 14.0f) * 2.0f
-        }, 
-        WHITE
+        }
     );
 
     /* clang-format on */
@@ -435,6 +431,12 @@ static void SetBlock(int px, int py, Block *block) {
     playfield[py][px].pos2 = playfield[py][px].pos1;
 }
 
+/* 게임 설정 창을 보여준다. */
+static void ShowOptionsMenu(void) {
+    if (!subw_opts) {
+        // TODO: add `GuiWindowBox`
+    }
+}
 
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos) {

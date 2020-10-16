@@ -20,7 +20,8 @@
     SOFTWARE.
 */
 
-#pragma once
+#ifndef CORE_H
+#define CORE_H
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -29,6 +30,7 @@
 #include <time.h>
 
 #include "btn.h"
+#include "raygui.h"
 #include "raylib.h"
 
 #define LEKO_IMPL 
@@ -113,7 +115,9 @@ Button *bt_quit;
 
 time_t elapsed_time;
 
-bool exit_window;
+bool close_window;
+
+bool subw_opts;
 
 int _elapsed_time;
 int current_score;
@@ -148,3 +152,5 @@ void UpdateGameplayScreen(void);
 
 /* 게임 플레이 화면을 종료한다. */
 int FinishGameplayScreen(void);
+
+#endif

@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,7 +20,8 @@
     SOFTWARE.
 */
 
-#pragma once
+#ifndef BTN_H
+#define BTN_H
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -48,8 +49,9 @@ typedef struct button {
 /* 버튼 구조체를 초기화한다. */
 Button *InitButton(Texture2D texture,
                    Rectangle source,
-                   Vector2 pos,
-                   Color tint);
+                   Vector2 pos);
 
 /* 주어진 버튼을 화면에 그린다. */
 void DrawButton(Button *button);
+
+#endif

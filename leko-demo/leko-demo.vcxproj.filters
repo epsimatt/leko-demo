@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\btn.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="src\core.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -24,21 +27,15 @@
     <ClCompile Include="src\main.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="src\opts.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="src\btn.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\btn.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
     <ClInclude Include="src\core.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="src\level.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="src\btn.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

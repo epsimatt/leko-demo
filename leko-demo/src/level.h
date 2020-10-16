@@ -20,7 +20,8 @@
     SOFTWARE.
 */
 
-#pragma once
+#ifndef LEVEL_H
+#define LEVEL_H
 
 #define LEVEL_00 "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0," \
                  "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0," \
@@ -56,3 +57,5 @@ const char *LEVEL_LIST[2] = {
     LEVEL_00, 
     LEVEL_01 
 };
+
+#endif
