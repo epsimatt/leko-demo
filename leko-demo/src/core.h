@@ -33,6 +33,8 @@
 
 #define LEKO_IMPL 
 
+#define LEKO_VERSION "0.0.1"
+
 #define TARGET_FPS 120
 
 #define DEFAULT_WIDTH 1024
