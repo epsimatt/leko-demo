@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,22 +22,19 @@
 
 #include "core.h"
 
-int main(void) {
-    // SetConfigFlags(FLAG_RESERVED | FLAG_WINDOW_ALWAYS_RUN);
+void main(void) {
+    // SetConfigFlags(FLAG_RESERVED);
     SetTargetFPS(TARGET_FPS);
+
+    SetExitKey(0);
 
     InitAudioDevice();
     InitWindow(DEFAULT_WIDTH, DEFAULT_HEIGHT, "leko-demo");
 
-    while (!close_window) {
-        close_window = WindowShouldClose();
+    while (!WindowShouldClose())
         UpdateCurrentScreen();
-    }
 
     /* TODO: 리소스 파일 메모리 해제 */
 
-    CloseAudioDevice();
-    CloseWindow();
-
-    return 0;
+    QuitWindow();
 }

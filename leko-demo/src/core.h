@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,18 +30,19 @@
 #include <time.h>
 
 #include "btn.h"
-#include "raygui.h"
-#include "raylib.h"
 
 #define LEKO_IMPL 
+
+#define TARGET_FPS 120
 
 #define DEFAULT_WIDTH 1024
 #define DEFAULT_HEIGHT 768
 
+#define SUBW1_WIDTH 256
+#define SUBW1_HEIGHT 160
+
 #define BT1_WIDTH 176
 #define BT1_HEIGHT 48
-
-#define TARGET_FPS 120
 
 #define CLR_OVERLAY (Color) { 35, 37, 37, 127 }
 #define CLR_TEXT (Color) { 231, 231, 231, 255 }
@@ -98,7 +99,8 @@ typedef struct block {
     int _frame_counter; // 블록의 프레임 카운터
 } Block;
 
-Font ft_default;
+Font ft_ngc14;
+Font ft_ngc24;
 
 Sound sn_blk_marked;
 Sound sn_blk_pressed;
@@ -115,9 +117,7 @@ Button *bt_quit;
 
 time_t elapsed_time;
 
-bool close_window;
-
-bool subw_opts;
+bool draw_options;
 
 int _elapsed_time;
 int current_score;
@@ -140,6 +140,9 @@ LEKO_IMPL bool LoadLevelFromStr(const char *str, Block result[PF_HEIGHT][PF_WIDT
 
 /* 게임의 다음 장면으로 넘어간다. */
 LEKO_IMPL void MoveTo(int next_scene);
+
+/* 게임을 '깔끔하게' 종료한다. */
+LEKO_IMPL void QuitWindow(void);
 
 /* 게임의 현재 장면을 업데이트한다. */
 LEKO_IMPL void UpdateCurrentScreen(void);

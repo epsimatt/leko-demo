@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +23,11 @@
 #include "core.h"
 #include "level.h"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
+#undef RAYGUI_IMPLEMENTATION
+
 static const float FALLING_SPEED = 2.4f;
 
 static Block playfield[PF_HEIGHT][PF_WIDTH];
@@ -44,6 +49,9 @@ static void DrawButtons(void);
 
 /* 전경 화면을 그린다. */
 static void DrawForeground(void);
+
+/* 게임 설정 화면을 그린다. */
+static void DrawOptions(void);
 
 /* 블록이 놓이는 공간을 그린다. */
 static void DrawPlayfield(void);
@@ -72,9 +80,6 @@ static void PlayBlockAnimation(Block *block);
 /* 주어진 좌표에 블록을 놓는다. */
 static void SetBlock(int px, int py, Block *block);
 
-/* 게임 설정 창을 보여준다. */
-static void ShowOptionsMenu(void);
-
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos);
 
@@ -98,14 +103,14 @@ static void DrawButtons(void) {
     DrawButton(bt_retry);
     DrawButton(bt_quit);
     
-    if (bt_options->action)
-        ShowOptionsMenu();
+    if (!draw_options && bt_options->action)
+        draw_options = true;
     
     if (bt_retry->action)
         LoadLevelFromStr(LEVEL_LIST[level], playfield);
-    
-    if (bt_quit->action)
-        close_window = true;
+	
+	if (bt_quit->action)
+        QuitWindow();
 }
 
 /* 전경 화면을 그린다. */
@@ -121,7 +126,7 @@ static void DrawForeground(void) {
     strftime(elapsed_time_str, ISTR_SZ, "%M:%S", localtime(&elapsed_time));
 
     DrawTextEx(
-        ft_default, 
+        ft_ngc24, 
         current_score_str, 
         (Vector2) {
             136.0f, 
@@ -133,7 +138,7 @@ static void DrawForeground(void) {
     );
 
     DrawTextEx(
-        ft_default, 
+        ft_ngc24, 
         highest_score_str, 
         (Vector2) {
             136.0f, 
@@ -145,7 +150,7 @@ static void DrawForeground(void) {
     );
 
     DrawTextEx(
-        ft_default, 
+        ft_ngc24, 
         elapsed_time_str, 
         (Vector2) {
             136.0f, 
@@ -155,6 +160,28 @@ static void DrawForeground(void) {
         2, 
         CLR_TEXT
     );
+}
+
+/* 게임 설정 화면을 그린다. */
+static void DrawOptions(void) {
+    static bool close_subw1 = false;
+
+    if (draw_options && !close_subw1) {
+        close_subw1 = GuiWindowBox(
+            (Rectangle) {
+                (DEFAULT_WIDTH - SUBW1_WIDTH) / 2,
+                (DEFAULT_HEIGHT - SUBW1_HEIGHT) / 2,
+                SUBW1_WIDTH,
+                SUBW1_HEIGHT
+            },
+            "\xEC\x84\xA4\xEC\xA0\x95"
+        );
+
+        if (close_subw1) {
+            draw_options = false;
+            close_subw1 = false;
+        }
+    }
 }
 
 /* 블록이 놓이는 공간을 그린다. */
@@ -431,13 +458,6 @@ static void SetBlock(int px, int py, Block *block) {
     playfield[py][px].pos2 = playfield[py][px].pos1;
 }
 
-/* 게임 설정 창을 보여준다. */
-static void ShowOptionsMenu(void) {
-    if (!subw_opts) {
-        // TODO: add `GuiWindowBox`
-    }
-}
-
 /* 블록의 실제 좌표를 레벨 좌표로 변환한다. */
 static Vector2 toLevelCoords(Vector2 pos) {
     return (Vector2) {
@@ -502,6 +522,9 @@ void InitGameplayScreen(void) {
     result = 0;
 
     InitButtons();
+
+    GuiLoadStyle("res/styles/lk_default.rgs");
+    GuiSetFont(ft_ngc14);
     
     LoadLevelFromStr(LEVEL_LIST[level], playfield);
 }
@@ -515,6 +538,8 @@ void UpdateGameplayScreen(void) {
     DrawButtons();
 
     DrawPlayfield();
+
+    DrawOptions();
 }
 
 /* 게임 플레이 화면을 종료한다. */

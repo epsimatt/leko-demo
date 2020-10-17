@@ -1,4 +1,4 @@
-/*
+﻿/*
     Copyright (c) 2020 epsimatt
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+
+#define LEKO_EXIT exit
 
 #include "core.h"
 
@@ -77,8 +79,8 @@ LEKO_IMPL bool LoadResourceTx(Texture2D *tx, const char *file_name) {
 LEKO_IMPL bool LoadAllResources(void) {
     static int result;
 
-    // https://github.com/raysan5/raylib/issues/323
-    ft_default = LoadFontEx("res/font/nanumgothic-coding.ttf", 24, NULL, 128);
+    ft_ngc14 = LoadFont("res/font/nanumgothic-coding_14px.fnt");
+    ft_ngc24 = LoadFont("res/font/nanumgothic-coding_24px.fnt");
 
     for (int i = 0; i < SNL_LEN; i++)
         result = (sn_list[i] != NULL && !LoadResourceSn(sn_list[i], snf_list[i]));
@@ -130,6 +132,14 @@ LEKO_IMPL void MoveTo(int next_scene) {
 
         current_scene = next_scene;
     }
+}
+
+/* 게임을 '깔끔하게' 종료한다. */
+LEKO_IMPL void QuitWindow(void) {
+    CloseAudioDevice();
+    CloseWindow();
+
+    LEKO_EXIT(0);
 }
 
 /* 게임의 현재 장면을 업데이트한다. */
