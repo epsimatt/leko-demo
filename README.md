@@ -13,7 +13,7 @@ A block puzzle game inspired by the game 'blox forever', made with [raylib](http
 ## Screenshots
 
 ![lk_gameplay_01](screenshots/lk_gameplay_01.png)
-![lk_gameplay_02](screenshots/lk_gameplay_01.png)
+![lk_gameplay_02](screenshots/lk_gameplay_02.png)
 
 ## License
 MIT License
