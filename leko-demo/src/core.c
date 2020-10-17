@@ -88,6 +88,9 @@ LEKO_IMPL bool LoadAllResources(void) {
     for (int i = 0; i < TXL_LEN; i++)
         result = (tx_list[i] != NULL && !LoadResourceTx(tx_list[i], txf_list[i]));
 
+    vol_music = 100.0f;
+    vol_sfx = 100.0f;
+
     return result;
 }
 
@@ -140,6 +143,20 @@ LEKO_IMPL void QuitWindow(void) {
     CloseWindow();
 
     LEKO_EXIT(0);
+}
+
+/* 게임의 배경음 볼륨을 설정한다. */
+LEKO_IMPL void SetGlobalMusicVolume(float vol) {
+    // TODO: add some music?
+}
+
+/* 게임의 효과음 볼륨을 설정한다. */
+LEKO_IMPL void SetGlobalSoundVolume(float vol) {
+    for (int i = 0; i < SNL_LEN; i++)
+        SetSoundVolume(
+            *sn_list[i], 
+            (vol <= 1.0f) ? vol : (vol / 100.0f)
+        );
 }
 
 /* 게임의 현재 장면을 업데이트한다. */

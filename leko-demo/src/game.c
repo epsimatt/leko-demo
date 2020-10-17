@@ -23,10 +23,14 @@
 #include "core.h"
 #include "level.h"
 
+#pragma warning(push, 0)
+
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
 #undef RAYGUI_IMPLEMENTATION
+
+#pragma warning(pop)
 
 static const float FALLING_SPEED = 2.4f;
 
@@ -164,22 +168,82 @@ static void DrawForeground(void) {
 
 /* 게임 설정 화면을 그린다. */
 static void DrawOptions(void) {
-    static bool close_subw1 = false;
+    static bool subw1_close = false;
 
-    if (draw_options && !close_subw1) {
-        close_subw1 = GuiWindowBox(
+    const Vector2 subw1_pos = {
+        (DEFAULT_WIDTH - SUBW1_WIDTH) / 2.0f,
+        (DEFAULT_HEIGHT - SUBW1_HEIGHT) / 2.0f,
+    };
+
+    if (draw_options && !subw1_close) {
+        subw1_close = GuiWindowBox(
             (Rectangle) {
-                (DEFAULT_WIDTH - SUBW1_WIDTH) / 2,
-                (DEFAULT_HEIGHT - SUBW1_HEIGHT) / 2,
+                subw1_pos.x,
+                subw1_pos.y,
                 SUBW1_WIDTH,
                 SUBW1_HEIGHT
             },
             "\xEC\x84\xA4\xEC\xA0\x95"
         );
 
-        if (close_subw1) {
+        DrawTextEx(
+            ft_ngc14,
+            "\xEB\xB0\xB0\xEA\xB2\xBD\xEC\x9D\x8C:",
+            (Vector2) {
+                subw1_pos.x + 8.0f,
+                subw1_pos.y + 36.0f
+            },
+            14,
+            0,
+            CLR_TEXT
+        );
+
+        vol_music = GuiSlider(
+            (Rectangle) {
+                subw1_pos.x + 8.0f,
+                subw1_pos.y + 58.0f,
+                SUBW1_WIDTH - 16.0f,
+                16.0f
+            },
+            NULL,
+            NULL,
+            vol_music,
+            0,
+            100
+        );
+
+        DrawTextEx(
+            ft_ngc14,
+            "\xED\x9A\xA8\xEA\xB3\xBC\xEC\x9D\x8C:",
+            (Vector2) {
+                subw1_pos.x + 8.0f,
+                subw1_pos.y + 96.0f
+            },
+            14,
+            0,
+            CLR_TEXT
+        );
+
+        vol_sfx = GuiSlider(
+            (Rectangle) {
+                subw1_pos.x + 8.0f,
+                subw1_pos.y + 118.0f,
+                SUBW1_WIDTH - 16.0f, 
+                16.0f
+            },
+            NULL, 
+            NULL, 
+            vol_sfx, 
+            0, 
+            100
+        );
+
+        if (subw1_close) {
             draw_options = false;
-            close_subw1 = false;
+            subw1_close = false;
+
+            SetGlobalMusicVolume(vol_music);
+            SetGlobalSoundVolume(vol_sfx);
         }
     }
 }
@@ -521,6 +585,9 @@ void InitGameplayScreen(void) {
     level = 1;
     result = 0;
 
+    SetGlobalMusicVolume(vol_music);
+    SetGlobalSoundVolume(vol_sfx);
+
     InitButtons();
 
     GuiLoadStyle("res/styles/lk_default.rgs");
@@ -531,13 +598,15 @@ void InitGameplayScreen(void) {
 
 /* 게임 플레이 화면을 업데이트한다. */
 void UpdateGameplayScreen(void) {
-    _elapsed_time++;
+    if (!draw_options) {
+        _elapsed_time++;
 
-    DrawBackground();
-    DrawForeground();
-    DrawButtons();
+        DrawBackground();
+        DrawForeground();
+        DrawButtons();
 
-    DrawPlayfield();
+        DrawPlayfield();
+    }
 
     DrawOptions();
 }

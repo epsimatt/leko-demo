@@ -39,7 +39,7 @@
 #define DEFAULT_HEIGHT 768
 
 #define SUBW1_WIDTH 256
-#define SUBW1_HEIGHT 160
+#define SUBW1_HEIGHT 148
 
 #define BT1_WIDTH 176
 #define BT1_HEIGHT 48
@@ -119,6 +119,9 @@ time_t elapsed_time;
 
 bool draw_options;
 
+float vol_music;
+float vol_sfx;
+
 int _elapsed_time;
 int current_score;
 int highest_score;
@@ -143,6 +146,12 @@ LEKO_IMPL void MoveTo(int next_scene);
 
 /* 게임을 '깔끔하게' 종료한다. */
 LEKO_IMPL void QuitWindow(void);
+
+/* 게임의 배경음 볼륨을 설정한다. */
+LEKO_IMPL void SetGlobalMusicVolume(float vol);
+
+/* 게임의 효과음 볼륨을 설정한다. */
+LEKO_IMPL void SetGlobalSoundVolume(float vol);
 
 /* 게임의 현재 장면을 업데이트한다. */
 LEKO_IMPL void UpdateCurrentScreen(void);
