@@ -21,7 +21,7 @@
 #
 
 # 1. when compiling raylib: do `make clean` then `make OS=Windows_NT CC=x86_64-w64-mingw32-gcc` 
-# 2. do `make -f Makefile.win` to compile leko-demo
+# 2. do `make -f Makefile.l2w` to compile leko-demo
 
 .PHONY: clean
 
