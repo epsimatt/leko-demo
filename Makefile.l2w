@@ -20,31 +20,28 @@
 # SOFTWARE.
 #
 
-# 1. when compiling raylib: do `make clean` then `make OS=Windows_NT CC=x86_64-w64-mingw32-gcc` 
-# 2. do `make -f Makefile.l2w` to compile leko-demo
-
 .PHONY: clean
 
-LK_PATH := leko-demo
+PROJ_PATH := leko-demo
 
-BIN_PATH := $(LK_PATH)/bin
-LIB_PATH := $(LK_PATH)/lib
-SRC_PATH := $(LK_PATH)/src
+BIN_PATH := $(PROJ_PATH)/bin
+LIB_PATH := $(PROJ_PATH)/lib
+SRC_PATH := $(PROJ_PATH)/src
 
-RL_PATH := $(LIB_PATH)/raylib
-RG_PATH := $(LIB_PATH)/raygui
+RLIB_PATH := $(LIB_PATH)/raylib
+RGUI_PATH := $(LIB_PATH)/raygui
+
+INPUT = $(SRC_PATH)/btn.c $(SRC_PATH)/core.c $(SRC_PATH)/game.c $(SRC_PATH)/main.c
+OUTPUT = $(BIN_PATH)/$(PROJ_PATH).exe
 
 CC := x86_64-w64-mingw32-gcc
-CFLAGS := -I$(RL_PATH) -I$(RG_PATH) -O2 -std=c99
-LDFLAGS := -g -L$(RL_PATH) -Wl,--subsystem,windows -mwindows
+CFLAGS := -g -I$(RLIB_PATH) -I$(RGUI_PATH) -O2 -std=c99
+LDFLAGS := -L$(RLIB_PATH) -Wl,--subsystem,windows -mwindows
 LDLIBS := -lraylib_l2w -lopengl32 -lgdi32 -lwinmm -lpthread
 
-INPUT := $(SRC_PATH)/btn.c $(SRC_PATH)/core.c $(SRC_PATH)/game.c $(SRC_PATH)/main.c
-OUTPUT := ld_windows.exe
-
-_: 
+$(OUTPUT): $(INPUT)
 	mkdir -p $(BIN_PATH)
-	$(CC) $(INPUT) -o $(BIN_PATH)/$(OUTPUT) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
+	$(CC) $(INPUT) -o $(OUTPUT) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	rm -f $(BIN_PATH)/$(OUTPUT)
+	rm -rf $(BIN_PATH)

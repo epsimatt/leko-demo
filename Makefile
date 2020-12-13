@@ -20,28 +20,27 @@
 # SOFTWARE.
 #
 
-.PHONY: clean
+.PHONY: all clean
 
-LK_PATH := leko-demo
+PROJ_PATH := leko-demo
 
-BIN_PATH := $(LK_PATH)/bin
-LIB_PATH := $(LK_PATH)/lib
-SRC_PATH := $(LK_PATH)/src
+BIN_PATH := $(PROJ_PATH)/bin
+LIB_PATH := $(PROJ_PATH)/lib
+SRC_PATH := $(PROJ_PATH)/src
 
-RL_PATH := $(LIB_PATH)/raylib
-RG_PATH := $(LIB_PATH)/raygui
+RLIB_PATH := $(LIB_PATH)/raylib
+RGUI_PATH := $(LIB_PATH)/raygui
+
+INPUT = $(SRC_PATH)/btn.c $(SRC_PATH)/core.c $(SRC_PATH)/game.c $(SRC_PATH)/main.c
+OUTPUT = $(BIN_PATH)/$(PROJ_PATH)
 
 CC := gcc
-CFLAGS := -I$(RG_PATH) -std=c99 -O2 -D_DEFAULT_SOURCE
-LDFLAGS := -g
+CFLAGS := -g -I$(RGUI_PATH) -std=c99 -O2 -D_DEFAULT_SOURCE
 LDLIBS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-INPUT := $(SRC_PATH)/btn.c $(SRC_PATH)/core.c $(SRC_PATH)/game.c $(SRC_PATH)/main.c
-OUTPUT := ld_linux
-
-_: 
+$(OUTPUT): $(INPUT)
 	mkdir -p $(BIN_PATH)
-	$(CC) $(INPUT) -o $(BIN_PATH)/$(OUTPUT) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
+	$(CC) $(INPUT) -o $(OUTPUT) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	rm -f $(BIN_PATH)/$(OUTPUT)
+	rm -rf $(BIN_PATH)
