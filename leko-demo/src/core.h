@@ -59,6 +59,8 @@
 #define MAX_ELAPSED_TIME 3599
 #define MAX_LEVEL 1
 
+#define SCORE_MUL 100
+
 #define PF_STX (5 * BLOCK_SZ)
 #define PF_STY BLOCK_SZ
 

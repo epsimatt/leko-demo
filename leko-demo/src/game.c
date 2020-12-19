@@ -43,6 +43,7 @@ static char highest_score_str[ISTR_SZ];
 static char elapsed_time_str[ISTR_SZ];
 
 static int level;
+static int matches;
 static int result;
 
 /* 배경 화면을 그린다. */
@@ -110,8 +111,12 @@ static void DrawButtons(void) {
     if (!draw_options && bt_options->action)
         draw_options = true;
     
-    if (bt_retry->action)
+    if (bt_retry->action) {
+        _elapsed_time = 0;
+        current_score = 0;
+        
         LoadLevelFromStr(LEVEL_LIST[level], playfield);
+    }
 	
 	if (bt_quit->action)
         QuitWindow();
@@ -251,6 +256,8 @@ static void DrawOptions(void) {
 /* 블록이 놓이는 공간을 그린다. */
 static void DrawPlayfield(void) {
     Block *block;
+    
+    matches = 0;
 
     for (int py = 0; py < PF_HEIGHT; py++) {
         for (int px = 0; px < PF_WIDTH; px++) {
@@ -279,6 +286,11 @@ static void DrawPlayfield(void) {
             }
         }
     }
+    
+    current_score += (matches ? (matches + 1) : 0) * SCORE_MUL;
+    
+    if (highest_score < current_score)
+        highest_score = current_score;
 
     HandleMouseEvents();
 
@@ -302,6 +314,8 @@ static void FindMatches(Block *block) {
                 && adjacent_blocks[i]->state == BLS_NORMAL) {
                 adjacent_blocks[i]->state = BLS_MARKED;
                 block->state = BLS_MARKED;
+                
+                matches++;
             }
         }
     }
